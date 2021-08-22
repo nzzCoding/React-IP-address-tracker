@@ -1,38 +1,112 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik'), url("./fonts/Rubik/Rubik-VariableFont_wght.ttf") format('opentype');
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+:root, body, #root, .app-container {
+  height: 100%;
+  width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  font-family: 'Rubik';
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+}
+.app-header {
+  background-image: url("./images/pattern-bg.png");
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.app-title {
   color: white;
+  font-weight: 400;
 }
 
-.App-link {
-  color: #61dafb;
+.search-bar {
+  display: flex;
+  flex-direction: row;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.search-input {
+  border: none;
+  border-radius: 15px 0 0 15px;
+}
+
+.search-button {
+  border: none;
+  border-radius: 0 15px 15px 0;
+  background-color: hsl(0, 0%, 17%);
+}
+
+.ip-info {
+  background-color: white;
+}
+
+.ip-info-category {
+
+}
+.category-head {
+
+}
+.category-body {
+
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    background-color: lemonchiffon;
   }
-  to {
-    transform: rotate(360deg);
+  .app-header {
+    height: 35vh;
+  }
+
+  .app-title {
+    margin: 36px 0 36px 0;
+  }
+
+  .search-bar {
+    height: 60px;
+    width: 555px;
+  }
+
+  .search-input {
+    width: 497px;
+    padding: 20px;
+  }
+
+  .search-button {
+    width: 58px;
+    padding: 20px;
+  }
+
+  .ip-info {
+    display: flex;
+    flex-direction: row;
+    height: 20.25vh;
+  }
+  .ip-info-separator {
+    height: 9.25vh;
+    width: 1px;
+    background-color: hsl(0, 0%, 59%);
+  }
+  .ip-info-category {
+
+  }
+  .category-head {
+
+  }
+  .category-body {
+
   }
 }
