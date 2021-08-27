@@ -35,7 +35,7 @@ function IpInfoCategory(props) {
   return (
     <div className="ip-info-category">
       <h5 className="category-head">{props.category}</h5>
-      <p className="category-body">{props.content}</p>
+      <p className="category-body">{props.content}Brookklyn, NY 192</p>
     </div>
   )
 }
@@ -160,14 +160,16 @@ function App(props) {
 
   return (
     <div className="app-container">
-      <AppHeader 
-        validSearch={validSearch}
-        searchInputChange={searchInputChange} 
-        searchButtonClick={searchButtonClick}
-      />
-      <IpInfo ipifyData={response} />
+      <div className="prompter">
+        <AppHeader 
+          validSearch={validSearch}
+          searchInputChange={searchInputChange} 
+          searchButtonClick={searchButtonClick}
+        />
+        <IpInfo ipifyData={response} />
+      </div>
       {/*<Carte ipifyData={response}/>*/}
-      <div style={{height: "520px", border: "solid black 5px"}}></div>
+      <div className="filler" style={{height: "570px", border: "solid black 5px"}}></div>
     </div>
   );
 }
