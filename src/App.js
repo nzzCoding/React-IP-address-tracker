@@ -35,7 +35,7 @@ function IpInfoCategory(props) {
   return (
     <div className="ip-info-category">
       <h5 className="category-head">{props.category}</h5>
-      <p className="category-body">{props.content}Brookklyn, NY 192</p>
+      <p className="category-body">{props.content}Brookklyn, NY 1999992</p>
     </div>
   )
 }
