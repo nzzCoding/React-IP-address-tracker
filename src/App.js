@@ -23,9 +23,6 @@ function AppHeader(props) {
           onClick={props.searchButtonClick}>
             <Arrow />
         </button>
-        {(!props.validSearch) ? 
-          <p>please enter a valid IP address</p> :
-          undefined }
       </div>
     </div>
   )
@@ -35,7 +32,7 @@ function IpInfoCategory(props) {
   return (
     <div className="ip-info-category">
       <h5 className="category-head">{props.category}</h5>
-      <p className="category-body">{props.content}Brookklyn, NY 1999992</p>
+      <p className="category-body">{props.content}</p>
     </div>
   )
 }
@@ -53,6 +50,8 @@ function IpInfo(props) {
       );
     timezone = "UTC " + props.ipifyData.location.timezone;
     isp = props.ipifyData.isp;
+  } else {
+    ipAddress = location = timezone = isp = '-';
   }
   const verticalSeparator = (
     <div className="ip-info-separator"></div>
@@ -134,16 +133,23 @@ function App(props) {
   const searchButtonClick = (event) => {
     let numField = "(0|[1-2][0-9]([0-5]|(?<!2[5-9])[6-9])|[1-9][0-9]?)";
     let validity = new RegExp(
-        `^(${numField}\\.){3}${numField}$`).test(search);  
-    let newRequest = (validity) ? 
-      `${initialRequest}&ipAddress=${search}` : request;
+        `^(${numField}\\.){3}${numField}$`).test(search);
+
+    let newRequest;
+    if (validity) {
+      newRequest = `${initialRequest}&ipAddress=${search}`;
+    } else {
+      newRequest = request;
+      alert("Please enter a valid IP address or domain name");
+    } 
+
     setValidSearch(validity);
     setRequest(newRequest);
   };
   
   useEffect(() => {
     console.log("App useEffect");
-    fetch("json placeholder")
+    fetch("waa")
     .then((response) => {
       if (response.ok) {
         return response.json()
@@ -169,7 +175,7 @@ function App(props) {
         <IpInfo ipifyData={response} />
       </div>
       {/*<Carte ipifyData={response}/>*/}
-      <div className="filler" style={{height: "570px", border: "solid black 5px"}}></div>
+      <div className="filler" style={{height: "530px", border: "solid black 5px"}}></div>
     </div>
   );
 }
