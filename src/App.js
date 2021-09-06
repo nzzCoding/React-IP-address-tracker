@@ -6,6 +6,8 @@ import markerIcon from './images/icon-location.svg';
 import { ReactComponent as Arrow } from './images/icon-arrow.svg';
 
 function AppHeader(props) {
+  /*
+  Stateless component, rendering the title and search bar */
   return (
     <div className="app-header">
       <header className="app-title">
@@ -29,15 +31,26 @@ function AppHeader(props) {
 }
 
 function IpInfoCategory(props) {
+  /*
+  Stateless component takes props from parent component (IpInfo) and displays
+  it as category: data */
   return (
     <div className="ip-info-category">
-      <h5 className="category-head">{props.category}</h5>
-      <p className="category-body">{props.content}</p>
+      <div className="category-head">
+        <h5>{props.category}</h5>
+      </div>
+      <div className="category-body">
+        {props.content}
+      </div>
     </div>
   )
 }
 
 function IpInfo(props) {
+  /*
+  Stateless component takes data from App then iterates over the 4 categories and
+  passes to child component IpInfoCategory the category name and its relevant data
+  if failure to fetch passes "-" instead of data*/
   let ipAddress, location, timezone, isp;
   if (props.ipifyData !== undefined && props.ipifyData !== "Error") {
     ipAddress = props.ipifyData.ip;
@@ -79,19 +92,31 @@ function IpInfo(props) {
 }
 
 function Carte(props) {
-  console.log("Carte rendering");
+  /*
+  Component responsible of rendering the map
+  takes props (lat, lng) from App, if not available yet resort to default 
+  location: (33.58, -7.60) 
+  if lat or lng changes useEffect is triggered and redraws the map and its marker
+  to fit the new location*/
   const style = {
-    border: "solid black 5px",
-    height: "520px"
+    height: "530px",
   }
   let [lat, lng] = [33.589886, -7.603869];
   if (props.ipifyData !== undefined && props.ipifyData !== 'Error') {
     lat = Number(props.ipifyData.location.lat);
     lng = Number(props.ipifyData.location.lng)
   }
-  useEffect(() => {
-    console.log("carte useEffect");
+  const leafletMarker = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerIcon,
 
+    iconSize:     [47, 55], // size of the icon
+    shadowSize:   [47, 55], // size of the shadow
+    iconAnchor:   [23.5, 55], // point of the icon which will correspond to marker's location
+    shadowAnchor: [23.5, 55],  // the same for the shadow
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+});
+  useEffect(() => {
     let leafletMap = L.map("mapid").setView([lat, lng], 13);
     const accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
     L.tileLayer(
@@ -105,7 +130,8 @@ function Carte(props) {
         accessToken: accessToken
       }
     ).addTo(leafletMap);
-
+    
+    L.marker([lat, lng], {icon: leafletMarker}).addTo(leafletMap);
     return () => {
       leafletMap.remove();
     }
@@ -116,40 +142,69 @@ function Carte(props) {
   )
 }
 
-function App(props) {
-  console.log("App rendering");
+function checkInputType(string) {
+  /*
+  Helper function that takes a string as input and returns
+  "ip address" or "domain name" if it matches the corresponding regex
+  false if no regex matches or string length > 254*/
+  if (string.length > 254) {
+    return false
+  }
 
+  let numField = "(0|[1-2][0-9]([0-5]|(?<!2[5-9])[6-9])|[1-9][0-9]?)";
+  let ipRegex = new RegExp(
+      `^(${numField}\\.){3}${numField}$`);
+  if (ipRegex.test(string)) {
+    return "ip address"
+  }
+
+  let domainRegex = 
+    /^(https?:\/\/)?(www\.)?([a-z0-9]{1}[a-z0-9-]{0,62}\.){1,2}[a-z]{2,63}$/i;
+  if (domainRegex.test(string)) {
+    return "domain name"
+  }
+
+  return false
+}
+
+function App(props) {
+  /*
+  Main component
+  passes props (response) to Carte component and IpInfo component
+  passes props (event functions) to AppHeader component
+  communicates with ipify API to get data about an ip or domain name
+  the first data fetch doesn't use any options, so the data returned concern the user IP
+  */
   let initialRequest = `https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_IPIFY_KEY}`;
 
   let [request, setRequest] = useState(initialRequest);
   let [response, setResponse] = useState(undefined);
   let [search, setSearch] = useState("");
-  let [validSearch, setValidSearch] = useState(true);
+  let [validSearch, setValidSearch] = useState(true);//not used until design for error handling is specified
 
   const searchInputChange = (event) => {
     setSearch(event.target.value);
   };
 
   const searchButtonClick = (event) => {
-    let numField = "(0|[1-2][0-9]([0-5]|(?<!2[5-9])[6-9])|[1-9][0-9]?)";
-    let validity = new RegExp(
-        `^(${numField}\\.){3}${numField}$`).test(search);
-
-    let newRequest;
-    if (validity) {
+    let newRequest, validity;
+    if (checkInputType(search) === "ip address") {
       newRequest = `${initialRequest}&ipAddress=${search}`;
+      validity = true;
+    } else if (checkInputType(search) === "domain name") {
+      newRequest = `${initialRequest}&domain=${search}`;
+      validity = true;
     } else {
       newRequest = request;
+      validity = false;
       alert("Please enter a valid IP address or domain name");
-    } 
-
+    }
     setValidSearch(validity);
     setRequest(newRequest);
   };
   
   useEffect(() => {
-    console.log("App useEffect");
-    fetch("waa")
+    fetch(request)
     .then((response) => {
       if (response.ok) {
         return response.json()
@@ -174,8 +229,7 @@ function App(props) {
         />
         <IpInfo ipifyData={response} />
       </div>
-      {/*<Carte ipifyData={response}/>*/}
-      <div className="filler" style={{height: "530px", border: "solid black 5px"}}></div>
+      <Carte ipifyData={response}/>
     </div>
   );
 }

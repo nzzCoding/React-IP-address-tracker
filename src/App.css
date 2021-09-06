@@ -13,7 +13,6 @@
 }
 body {
   font-family: 'Rubik';
-  background-color: darkkhaki;
 }
 .app-container {
   display: flex;
@@ -23,7 +22,7 @@ body {
   background-image: url("./images/pattern-bg.png");
   background-position: center;
   background-size: cover;
-  z-index: 1;
+  z-index: 500;
   flex-grow: 1;
 }
 .app-title {
@@ -50,9 +49,8 @@ body {
   color: hsl(0, 0%, 17%);
 }
 
-@media only screen and 
-(min-width: 320px) and 
-(max-width: 768px) {
+@media only screen 
+and (min-width: 375px) and (max-width: 1439px) {
   .prompter {
     display: flex;
     flex-direction: column;
@@ -93,6 +91,7 @@ body {
   .ip-info {
     min-height: 100%;
     min-width: 86.66%;
+    max-width: 325px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -116,7 +115,7 @@ body {
   }
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 1440px) {
   .prompter {
     height: 35%;
     min-height: 280px;
@@ -161,26 +160,29 @@ body {
     border-left: 1px solid hsl(0, 0%, 59%);
   }
   .ip-info {
-    width: 77.08%;
+    width: 86.6%;
     min-height: 50%;
-    min-width: 720px;
+    min-width: 1110px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
   }
   .ip-info-category {
+    min-width: 25%;
     height: 60%;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    padding: 0 20px;
-    overflow: hidden;
+    justify-content: flex-start;
+    
   }
   .category-head {
+    margin-bottom: 20px;
     font-size: smaller;
   }
   .category-body {
     font-size: x-large;
     font-weight: 500;
+    overflow: auto;
   }
 }
