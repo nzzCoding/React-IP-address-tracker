@@ -29,8 +29,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [github page](https://github.com/nzzCoding/React-IP-address-tracker/edit/deploy-branch)
+- Live Site URL: [React app](https://nzz-ip-address-tracker.netlify.app)
 
 ## My process
 
@@ -44,4 +44,4 @@ Users should be able to:
 
 ## Author
 
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/nzzCoding)
+- Frontend Mentor - [nzzCoding](https://www.frontendmentor.io/profile/nzzCoding)
