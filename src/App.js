@@ -177,34 +177,29 @@ function App(props) {
   */
   let initialRequest = `https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_IPIFY_KEY}`;
 
-  let [request, setRequest] = useState(initialRequest);
+  let [requestOptions, setRequestOptions] = useState("");
   let [response, setResponse] = useState(undefined);
   let [search, setSearch] = useState("");
-  let [validSearch, setValidSearch] = useState(true);//not used until design for error handling is specified
 
   const searchInputChange = (event) => {
     setSearch(event.target.value);
   };
 
   const searchButtonClick = (event) => {
-    let newRequest, validity;
+    let newRequestOptions, validity;
     if (checkInputType(search) === "ip address") {
-      newRequest = `${initialRequest}&ipAddress=${search}`;
-      validity = true;
+      newRequestOptions = `&ipAddress=${search}`;
     } else if (checkInputType(search) === "domain name") {
-      newRequest = `${initialRequest}&domain=${search}`;
-      validity = true;
+      newRequestOptions = `&domain=${search}`;
     } else {
-      newRequest = request;
-      validity = false;
+      newRequestOptions = requestOptions;
       alert("Please enter a valid IP address or domain name");
     }
-    setValidSearch(validity);
-    setRequest(newRequest);
+    setRequestOptions(newRequestOptions);
   };
   
   useEffect(() => {
-    fetch(request)
+    fetch(initialRequest + requestOptions)
     .then((response) => {
       if (response.ok) {
         return response.json()
@@ -217,13 +212,12 @@ function App(props) {
     .catch((error) => {
       setResponse("Error");
     })
-  }, [request]);
+  }, [requestOptions]);
 
   return (
     <div className="app-container">
       <div className="prompter">
         <AppHeader 
-          validSearch={validSearch}
           searchInputChange={searchInputChange} 
           searchButtonClick={searchButtonClick}
         />
